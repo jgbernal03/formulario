@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acceso al Formulario</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 2.5rem 2rem;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+    }
+    .circulo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .circulo-open { background: #dcfce7; color: #166534; }
+    .circulo-closed { background: #fee2e2; color: #991b1b; }
+    .badge {
+      display: inline-block;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+    }
+    .badge-open { background: #dcfce7; color: #166634; }
+    .badge-closed { background: #fee2e2; color: #991b1b; }
+    h1 { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 0.75rem; }
+    .mensaje { font-size: 15px; color: #6b7280; line-height: 1.6; margin-bottom: 1.5rem; }
+    .debug {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #185FA5;
+      color: #ffffff;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .horario { margin-top: 1.5rem; font-size: 13px; color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="circulo" id="circulo"></div>
+    <div class="badge" id="badge"></div>
+    <h1 id="titulo"></h1>
+    <div class="debug" id="debug"></div>
+    <p class="mensaje" id="mensaje"></p>
+    <div id="boton"></div>
+    <p class="horario">Horario: lunes a viernes, 8:00 AM - 6:00 PM</p>
+  </div>
+
+  <script>
+    var FORM_URL = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=gcPCyy4vk02R0VBskxas55hI-jyv8MNOieNtTeb6aU9UMVZBUEg1MkVJRkxRWFNLNVBYN1ZFQ0JISS4u";
+
+    var ahora = new Date();
+    var dia = ahora.getDay();
+    var hora = ahora.getHours();
+    var minutos = ahora.getMinutes();
+    var horaDecimal = hora + (minutos / 60);
+
+    var diasNombre = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+
+    document.getElementById("debug").innerHTML =
+      "Fecha/hora detectada: " + ahora.toString() + "<br>" +
+      "Dia semana (0=Dom, 6=Sab): " + dia + " (" + diasNombre[dia] + ")<br>" +
+      "Hora: " + hora + ":" + minutos + "<br>" +
+      "Hora decimal: " + horaDecimal.toFixed(2) + "<br>" +
+      "Es dia de semana (1-5): " + (dia >= 1 && dia <= 5) + "<br>" +
+      "Es horario (8-18): " + (horaDecimal >= 8 && horaDecimal < 18);
+
+    var esDiaSemana = (dia >= 1 && dia <= 5);
+    var esHorario = (horaDecimal >= 8 && horaDecimal < 18);
+    var abierto = esDiaSemana && esHorario;
+
+    var circulo = document.getElementById("circulo");
+    circulo.textContent = abierto ? "OK" : "X";
+    circulo.className = "circulo " + (abierto ? "circulo-open" : "circulo-closed");
+
+    var badge = document.getElementById("badge");
+    badge.textContent = abierto ? "Formulario abierto" : "Formulario cerrado";
+    badge.className = "badge " + (abierto ? "badge-open" : "badge-closed");
+
+    document.getElementById("titulo").textContent = abierto
+      ? "El formulario esta disponible"
+      : "El formulario esta cerrado";
+
+    document.getElementById("mensaje").textContent = abierto
+      ? "Puedes acceder y completar el formulario ahora."
+      : "El formulario esta disponible de lunes a viernes entre las 8:00 AM y las 6:00 PM.";
+
+    document.getElementById("boton").innerHTML = abierto
+      ? '<a class="btn" href="' + FORM_URL + '" target="_blank">Ir al formulario</a>'
+      : "";
+  </script>
+</body>
+</html>
