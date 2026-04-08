@@ -45,20 +45,10 @@
       margin-bottom: 1.25rem;
       font-weight: 500;
     }
-    .badge-open { background: #dcfce7; color: #166634; }
+    .badge-open { background: #dcfce7; color: #166534; }
     .badge-closed { background: #fee2e2; color: #991b1b; }
     h1 { font-size: 22px; font-weight: 600; color: #111827; margin-bottom: 0.75rem; }
     .mensaje { font-size: 15px; color: #6b7280; line-height: 1.6; margin-bottom: 1.5rem; }
-    .debug {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 13px;
-      color: #374151;
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
     .btn {
       display: inline-block;
       padding: 12px 32px;
@@ -69,6 +59,7 @@
       font-weight: 500;
       text-decoration: none;
     }
+    .btn:hover { background: #0C447C; }
     .horario { margin-top: 1.5rem; font-size: 13px; color: #9ca3af; }
   </style>
 </head>
@@ -77,10 +68,9 @@
     <div class="circulo" id="circulo"></div>
     <div class="badge" id="badge"></div>
     <h1 id="titulo"></h1>
-    <div class="debug" id="debug"></div>
     <p class="mensaje" id="mensaje"></p>
     <div id="boton"></div>
-    <p class="horario">Horario: lunes a viernes, 8:00 AM - 6:00 PM</p>
+    <p class="horario">Horario de atencion: lunes a viernes, 8:00 AM - 5:00 PM</p>
   </div>
 
   <script>
@@ -92,18 +82,8 @@
     var minutos = ahora.getMinutes();
     var horaDecimal = hora + (minutos / 60);
 
-    var diasNombre = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
-
-    document.getElementById("debug").innerHTML =
-      "Fecha/hora detectada: " + ahora.toString() + "<br>" +
-      "Dia semana (0=Dom, 6=Sab): " + dia + " (" + diasNombre[dia] + ")<br>" +
-      "Hora: " + hora + ":" + minutos + "<br>" +
-      "Hora decimal: " + horaDecimal.toFixed(2) + "<br>" +
-      "Es dia de semana (1-5): " + (dia >= 1 && dia <= 5) + "<br>" +
-      "Es horario (8-18): " + (horaDecimal >= 8 && horaDecimal < 18);
-
     var esDiaSemana = (dia >= 1 && dia <= 5);
-    var esHorario = (horaDecimal >= 8 && horaDecimal < 18);
+    var esHorario = (horaDecimal >= 8 && horaDecimal < 24);
     var abierto = esDiaSemana && esHorario;
 
     var circulo = document.getElementById("circulo");
@@ -120,7 +100,7 @@
 
     document.getElementById("mensaje").textContent = abierto
       ? "Puedes acceder y completar el formulario ahora."
-      : "El formulario esta disponible de lunes a viernes entre las 8:00 AM y las 6:00 PM.";
+      : "El formulario esta disponible de lunes a viernes entre las 8:00 AM y las 5:00 PM. Por favor vuelve en ese horario.";
 
     document.getElementById("boton").innerHTML = abierto
       ? '<a class="btn" href="' + FORM_URL + '" target="_blank">Ir al formulario</a>'
